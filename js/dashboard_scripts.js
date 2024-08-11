@@ -67,6 +67,48 @@ window.addEventListener('click', function(event) {
 });
 
 
+// Get the modal
+var deleteModal = document.getElementById("deleteModal");
+
+// Get the <span> element that closes the modal
+var delete_span = document.getElementById('delete_close');
+var cancel_btn = document.getElementById('cancel_btn');
+
+// When the user clicks on an edit link, open the modal
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach click event listeners to all elements with the class 'edit_link'
+    document.querySelectorAll('.delete_event_btn').forEach(function(deleteBtn) {
+        deleteBtn.addEventListener('click', function(event) {
+          const delete_event_id = deleteBtn.getAttribute('data-event-id');
+          const delete_event_name = deleteBtn.getAttribute('data-event-name');
+          
+          document.querySelector('#deleteModal .delete_event_name span').innerText = delete_event_name;
+          document.getElementById('delete_event_id').value = delete_event_id;
+
+          event.preventDefault();
+          deleteModal.style.display = "block";
+          
+        });
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    delete_span.addEventListener('click', function() {
+      deleteModal.style.display = "none";
+    });
+
+    cancel_btn.addEventListener('click', function() {
+      deleteModal.style.display = "none";
+    });
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.addEventListener('click', function(event) {
+        if (event.target == deleteModal) {
+          deleteModal.style.display = "none";
+        }
+    });
+});
+
+
 
 
 
