@@ -1,3 +1,9 @@
+<?php
+include '../settings/core.php';
+
+require_login();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,27 +12,38 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="../css/styles3.css">
+    <link rel="stylesheet" href="../css/styles.css">
 
 
 </head>
 <body >
+    <!-- The side navigation bar -->
     <div id = "side_nav_bar">
-        <div id = "brand_logo">
-            <img src="../images/logo2.png" alt="Brand Logo">
+        <div id="brand_logo">
+            <a href="../view/dashboard_page.php">
+                <img src="../images/logo2.png" alt="Brand Logo">
+            </a>
         </div>
+
         <a href="dashboard_page.php" class = "nav_item" style="color:#6AD4DD">
             <i class ="fa fa-home"></i>
             <p>DASHBOARD</p>
         </a>
+
         <a href="children_page.php" class = "nav_item">
             <i class ="fa fa-users"></i>
             <p class="nav_item_p1">PEOPLE</p>
         </a>
-        <a href="folders_page.php" class = "nav_item">
-            <i class ="fa fa-file-text-o"></i>
-            <p class="nav_item_p">DOCUMENTS</p>
-        </a>
+
+        <?php
+            if(is_admin()){
+                echo"<a href='folders_page.php' class = 'nav_item'>";
+                echo"<i class ='fa fa-file-text-o'></i>";
+                echo'<p class="nav_item_p">DOCUMENTS</p>';
+                echo'</a>';
+            }
+        ?>
+
         <a href="donations_page.php" class = "nav_item">
             <i class ="fa fa-gift"></i>
             <p>DONATIONS</p>
@@ -34,18 +51,21 @@
 
     </div>
     <div id = "body_section">
+        <!-- The top navigation bar -->
         <div id = "top_nav_bar">
             <i class="fa fa-user-circle"></i>
-            <p id="user_name"> Ama </p>
+            <p id="user_name"> <?php   
+            
+            echo $_SESSION['user_name'];?> </p>
             <div class="dropdown">
                 <button onclick="dropdownToggle('myDropdown')" class="dropbtn"><i class="fa fa-angle-down"></i></button>
                 <div id="myDropdown" class="dropdown-content">
-                    <a href="login_page.php">Login</a>
-                    <a href="register_page.php">Register</a>
                     <a href="../actions/logout_action.php">Logout</a>
                 </div>
             </div>
         </div>
+
+        <!-- The main page section -->
         <div id ="main_section">
             <p class="heading_text">HOME</p>
             <div id = "stats_sections">
@@ -67,20 +87,28 @@
                         <a class= "view_btn" href="children_page.php"><i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <div class = "stats_section">
-                    <div class = "top_section">
-                        <i class="fa fa-file-text-o"></i>
-                        <span class="top_text">
-                            <span class ="section_quantity"><?php echo $documents_count;?> <?php ?></span>
-                            <span class ="section_text">Documents</span>
-                        </span>
+                
+                <?php
+                if(is_admin()){
+                    echo "
+                    <div class='stats_section'>
+                        <div class='top_section'>
+                            <i class='fa fa-file-text-o'></i>
+                            <span class='top_text'>
+                                <span class='section_quantity'>{$documents_count}</span>
+                                <span class='section_text'>Documents</span>
+                            </span>
+                        </div>
+                        <div class='bottom_section'>
+                            <p class='bottom_text'>View records here</p>
+                            <a class='view_btn' href='folders_page.php'><i class='fa fa-arrow-circle-right'></i></a>
+                        </div>
                     </div>
-                    <div class = "bottom_section">
-                        <p class="bottom_text">View records here</p>
-                        <a class= "view_btn" href="folders_page.php"><i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
+                    ";
+                }
+                ?>
 
-                </div>
+
                 <div class = "stats_section">
                     <div class = "top_section">
                         <i class="fa fa-gift"></i>
@@ -97,7 +125,9 @@
                 </div>
 
             </div>
+
             <hr>
+
             <div id = "upcoming_events_section">
                 <div class="events_top">
                     <p>Upcoming Events</p>
@@ -123,52 +153,51 @@
                         $event_location = $event['event_location'];
                         $event_id = $event['event_id'];
                     ?>
-                        <div class="single_event">
-                            <div class="event_details">
-                                <div class="event_name">
-                                    <p><?php echo $event_name; ?></p>
+                    <div class="single_event">
+                        <div class="event_details">
+                            <div class="event_name">
+                                <p><?php echo $event_name; ?></p>
+                            </div>
+                            <div class="event_division"></div>
+                            <div class="event_date">
+                                <i class="fa fa-calendar"></i> 
+                                <div>
+                                    <p class="event_day"><?php echo $formatted_date; ?></p>
+                                    <p class="event_time"><span><?php echo $formatted_start_time; ?></span> - <span><?php echo $formatted_end_time; ?></span></p>
                                 </div>
-                                <div class="event_division"></div>
-                                <div class="event_date">
-                                    <i class="fa fa-calendar"></i> 
-                                    <div>
-                                        <p class="event_day"><?php echo $formatted_date; ?></p>
-                                        <p class="event_time"><span><?php echo $formatted_start_time; ?></span> - <span><?php echo $formatted_end_time; ?></span></p>
-                                    </div>
+                            </div>
+                            <div class="event_division"></div>
+                            <div class="event_location">
+                                <i class="fa fa-map-marker"></i> 
+                                <p><?php echo $event_location; ?></p>
+                            </div>
+                            <div class="event_division"></div>
+                            <div class="event_actions"> 
+                                <div>
+                                    <button class="action_btn edit_event_btn"
+                                    data-event-id="<?php echo $event_id; ?>"
+                                    data-event-name="<?php echo htmlspecialchars($event_name); ?>" 
+                                    data-event-date="<?php echo htmlspecialchars($event_date); ?>" 
+                                    data-event-location="<?php echo htmlspecialchars($event_location); ?>" 
+                                    data-start-time="<?php echo htmlspecialchars($event_time_start); ?>" 
+                                    data-finish-time="<?php echo htmlspecialchars($event_time_end); ?>" ><i class="fa fa-pencil"></i></button> 
+                                    <p class="action_text p1">Edit</p>
                                 </div>
-                                <div class="event_division"></div>
-                                <div class="event_location">
-                                    <i class="fa fa-map-marker"></i> 
-                                    <p><?php echo $event_location; ?></p>
-                                </div>
-                                <div class="event_division"></div>
-                                <div class="event_actions"> 
-                                    <div>
-                                        <button class="action_btn edit_event_btn"
-                                        data-event-id="<?php echo $event_id; ?>"
-                                        data-event-name="<?php echo htmlspecialchars($event_name); ?>" 
-                                        data-event-date="<?php echo htmlspecialchars($event_date); ?>" 
-                                        data-event-location="<?php echo htmlspecialchars($event_location); ?>" 
-                                        data-start-time="<?php echo htmlspecialchars($event_time_start); ?>" 
-                                        data-finish-time="<?php echo htmlspecialchars($event_time_end); ?>" ><i class="fa fa-pencil"></i></button> 
-                                        <p class="action_text p1">Edit</p>
-                                    </div>
-                                    <div>
-                                        <button class="action_btn delete_event_btn"><i class="fa fa-trash-o"></i></button>
-                                        <p class="action_text p2">Delete</p>
-                                    </div>
+                                <div>
+                                    <button class="action_btn delete_event_btn"><i class="fa fa-trash-o"></i></button>
+                                    <p class="action_text p2">Delete</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <?php
                     }
                     ?>
- 
-
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Modal for adding event -->
     <div id="addEventModal" class="modal">
         <div class="modal-content">
@@ -204,42 +233,61 @@
 
     <!-- Modal for editing event -->
     <div id="editEventModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Edit Event</h2>
-        <form id="editEventForm" action="../actions/update_event_action.php" method="post">
-            <input type="text" name="event_id" id="event_id" hidden>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Event</h2>
+            <form id="editEventForm" action="../actions/update_event_action.php" method="post">
+                <input type="text" name="event_id" id="event_id" hidden>
 
-            <label for="editEventName">Event Name:</label><br>
-            <input type="text" id="editEventName" name="editEventName" required><br><br><br>
+                <label for="editEventName">Event Name:</label><br>
+                <input type="text" id="editEventName" name="editEventName" required><br><br><br>
 
-            <label for="editEventLocation">Event Location:</label><br>
-            <input type="text" id="editEventLocation" name="editEventLocation" required><br><br><br>
+                <label for="editEventLocation">Event Location:</label><br>
+                <input type="text" id="editEventLocation" name="editEventLocation" required><br><br><br>
 
-            <div class="input_group">
-                <div class="input_item">
-                    <label for="editEventDate">Event Date:</label>
-                    <input type="date" id="editEventDate" name="editEventDate" required>
+                <div class="input_group">
+                    <div class="input_item">
+                        <label for="editEventDate">Event Date:</label>
+                        <input type="date" id="editEventDate" name="editEventDate" required>
+                    </div>
+                    <div class="input_item">
+                        <label for="editStartTime">Start Time:</label>
+                        <input type="time" id="editStartTime" name="editStartTime" required>
+                    </div>
+                    <div class="input_item">
+                        <label for="editFinishTime">Finish Time:</label>
+                        <input type="time" id="editFinishTime" name="editFinishTime" required><br><br>
+                    </div>
                 </div>
-                <div class="input_item">
-                    <label for="editStartTime">Start Time:</label>
-                    <input type="time" id="editStartTime" name="editStartTime" required>
-                </div>
-                <div class="input_item">
-                    <label for="editFinishTime">Finish Time:</label>
-                    <input type="time" id="editFinishTime" name="editFinishTime" required><br><br>
-                </div>
-            </div>
 
-            <button type="submit">Save Changes</button>
-        </form>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
     </div>
-</div>
 
 
 
-    <script src="../js/dashboard_scripts2.js" type="text/javascript"></script>
+    <script src="../js/dashboard_scripts.js" type="text/javascript"></script>
     <script src="../js/general_scripts.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php
+    if(isset($_SESSION['status']) && $_SESSION['status'] !='')
+    {
+        ?>
+        <script>
+            Swal.fire({
+            title: "<?php echo $_SESSION['status'];?>",
+            //text: "You clicked the button!",
+            icon: "<?php echo $_SESSION['status_code'];?>",
+            width: 500,
+            confirmButtonColor: "#002E35"
+            });
+
+        </script>
+        <?php
+            unset($_SESSION['status']);
+    }
+    ?>
 
 </body>
 

@@ -1,3 +1,9 @@
+<?php
+include '../settings/core.php';
+
+require_login();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donations</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/styles3.css">
+    <link rel="stylesheet" href="../css/styles.css">
 
 </head>
 <body>
+    <!-- The side navigation bar -->
     <div id = "side_nav_bar">
-        <div id = "brand_logo">
-            <img src="../images/logo2.png" alt="Brand Logo">
+        <div id="brand_logo">
+            <a href="../view/dashboard_page.php">
+                <img src="../images/logo2.png" alt="Brand Logo">
+            </a>
         </div>
         <a href="dashboard_page.php" class = "nav_item">
             <i class ="fa fa-home"></i>
@@ -21,10 +30,14 @@
             <i class ="fa fa-users"></i>
             <p class="nav_item_p1">PEOPLE</p>
         </a>
-        <a href="folders_page.php" class = "nav_item" >
-            <i class ="fa fa-file-text-o"></i>
-            <p class="nav_item_p">DOCUMENTS</p>
-        </a>
+        <?php
+            if(is_admin()){
+                echo"<a href='folders_page.php' class = 'nav_item'>";
+                echo"<i class ='fa fa-file-text-o'></i>";
+                echo'<p class="nav_item_p">DOCUMENTS</p>';
+                echo'</a>';
+            }
+        ?>
         <a href="donations_page.php" class = "nav_item" style="color:#6AD4DD">
             <i class ="fa fa-gift"></i>
             <p>DONATIONS</p>
@@ -32,18 +45,21 @@
 
     </div>
     <div id = "body_section">
+        <!-- The top navigation bar -->
         <div id = "top_nav_bar">
             <i class="fa fa-user-circle"></i>
-            <p id="user_name"> Ama </p>
+            <p id="user_name"> <?php  
+            
+            echo $_SESSION['user_name'];?> </p>
             <div class="dropdown">
                 <button onclick="dropdownToggle('myDropdown')" class="dropbtn"><i class="fa fa-angle-down"></i></button>
                 <div id="myDropdown" class="dropdown-content">
-                    <a href="login_page.php">Login</a>
-                    <a href="register_page.php">Register</a>
                     <a href="../actions/logout_action.php">Logout</a>
                 </div>
             </div>
         </div>
+
+        <!-- The main page section -->
         <div id ="main_section">
             <p class="heading_text">DONATIONS</p>
             <div class="header">
@@ -72,6 +88,7 @@
 
                     <?php                    
                     include "../actions/get_actions.php";
+                    
                     foreach($donations as $donation){
                         
     
@@ -95,9 +112,6 @@
                         $staff_info = getPersonInfoByStaffId_ctr($staff_id);
                         $staff_name = $staff_info['first_name'] . ' ' . $staff_info['last_name'];
 
-
-
-                        
                         echo "<tr>";
                         echo "<td><p>{$donor_name}</p></td>";
                         echo "<td>{$donor_contact}</td>";
@@ -110,16 +124,13 @@
                         echo "</div>";
                         echo "</td>";
                         echo "</tr>";
-                        
                     }
-                    
                     ?>
-
-                    
                 </tbody>
             </table>
         </div>
     </div>
+    
     <!--Modal for adding donations -->
     <div id="addDonationModal" class="modal">
         <div class="modal-content">
@@ -221,18 +232,32 @@
             <div>
                 <p class="info_label"> Donation Notes</p>
                 <p class="donation_notes"><span></span></p>
-            </div><br>
-
-        
-        
-    
-           
+            </div><br>  
 
         </div>
     </div>
   
-    <script src="../js/donation_scripts5.js" type="text/javascript"></script>
+    <script src="../js/donation_scripts.js" type="text/javascript"></script>
     <script src="../js/general_scripts.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php
+    if(isset($_SESSION['status']) && $_SESSION['status'] !='')
+    {
+        ?>
+        <script>
+            Swal.fire({
+            title: "<?php echo $_SESSION['status'];?>",
+            //text: "You clicked the button!",
+            icon: "<?php echo $_SESSION['status_code'];?>",
+            width: 400,
+            confirmButtonColor: "#002E35"
+            });
+
+        </script>
+        <?php
+            unset($_SESSION['status']);
+    }
+    ?>
 
 </body>
 

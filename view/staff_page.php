@@ -1,3 +1,9 @@
+<?php
+include '../settings/core.php';
+
+require_login();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>People - Staff page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/styles3.css">
+    <link rel="stylesheet" href="../css/styles.css">
 
 </head>
 <body>
+    <!-- The side navigation bar -->
     <div id = "side_nav_bar">
-        <div id = "brand_logo">
-            <img src="../images/logo2.png" alt="Brand Logo">
+        <div id="brand_logo">
+            <a href="../view/dashboard_page.php">
+                <img src="../images/logo2.png" alt="Brand Logo">
+            </a>
         </div>
         <a href="dashboard_page.php" class = "nav_item">
             <i class ="fa fa-home"></i>
@@ -21,10 +30,14 @@
             <i class ="fa fa-users"></i>
             <p class="nav_item_p1">PEOPLE</p>
         </a>
-        <a href="folders_page.php" class = "nav_item">
-            <i class ="fa fa-file-text-o"></i>
-            <p class="nav_item_p">DOCUMENTS</p>
-        </a>
+        <?php
+            if(is_admin()){
+                echo"<a href='folders_page.php' class = 'nav_item'>";
+                echo"<i class ='fa fa-file-text-o'></i>";
+                echo'<p class="nav_item_p">DOCUMENTS</p>';
+                echo'</a>';
+            }
+        ?>
         <a href="donations_page.php" class = "nav_item">
             <i class ="fa fa-gift"></i>
             <p>DONATIONS</p>
@@ -32,9 +45,12 @@
 
     </div>
     <div id = "body_section">
+        <!-- The top navigation bar -->
         <div id = "top_nav_bar">
             <i class="fa fa-user-circle"></i>
-            <p id="user_name"> Ama </p>
+            <p id="user_name"> <?php 
+            
+            echo $_SESSION['user_name'];?> </p>
             <div class="dropdown">
                 <button onclick="dropdownToggle('myDropdown')" class="dropbtn"><i class="fa fa-angle-down"></i></button>
                 <div id="myDropdown" class="dropdown-content">
@@ -44,6 +60,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- The main page section -->
         <div id ="main_section">
             <p class="heading_text">PEOPLE</p>
             
@@ -53,7 +71,7 @@
                 </div>
                         
                 <div class="search_bar">
-                    <input type="text" id="search_input" placeholder="Search...">
+                    <input type="text" id="search_input" onkeyup="searchFunction()" placeholder="Search...">
                     <i class="fa fa-search"></i>
                 </div>
             </div>
@@ -67,13 +85,10 @@
                 <p class="focused_page">Staff</p>
                 
             </div>
-
-            
-            <!-- <button class="add_staff_btn"> Add Staff <i class="fa fa-plus-circle"></i></button> -->
             </div>
             
 
-            <table class="people_table">
+            <table class="people_table" id="staff_doc_table">
                 <thead>
                     <tr>
                         <th>FIRST NAME</th>
@@ -114,91 +129,49 @@
             </table>
         </div>
     </div>
-
-    <!-- Modal for creating a new staff
-    <div id="addStaffModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add New Staff</h2>
-            <form id="createStaffForm">
-                <div class="input_group">
-                    <div class="input_item">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" id="firstName" name="firstName" placeholder="Enter first name here..." required><br><br>
-                    </div>
-                    
-                    <div class="input_item">
-                        <label for="middleName">Middle Name:</label>
-                        <input type="text" id="middleName" name="middleName" placeholder="Enter middle name here..."><br><br>
-                    </div>
-
-                    <div class="input_item">    
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" id="lastName" name="lastName" placeholder="Enter last name here..." required><br><br>
-                    </div>
-                </div>
-
-                <div class=" dates_gender_group">
-                    <div class="input_item ">
-                        <label for="gender">Gender:</label>
-                        <select id="gender" name="gender" class="child_gender" required>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                        </select><br><br>
-                    </div>
-                    <div class="input_item">
-                        <label for="dob">Date of Birth:</label>
-                        <input type="date" id="dob" name="dob" required><br><br>
-                    </div>
-                    <div class="input_item admission_date">
-                        <label for="employmentStartDate">Date of Employment:</label>
-                        <input type="date" id="employmentStartDate" name="employmentStartDate" required><br><br>
-                    </div>
-                    
-                </div>
-                <div class="input_group ">
-                    <div class="input_item">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email"  placeholder="Enter email here..." required><br><br>
-                    </div>
-                    <div class="input_item  work_rol">
-                        <label for="work_role">Work Role:</label>
-                        <select id="work_role" name="work_role" class="staff_work_role" required>
-                            <option value="Volunteer">Volunteer</option>
-                            <option value="Caregiver">Caregiver</option>
-                        </select><br><br>
-                    </div>
-
-                </div>
-
-                <div class="input_group">
-                    
-                    <div class="input_item">
-                        <label for="primaryContact">Primary Contact:</label>
-                        <input type="tel" id="primaryContact" name="primaryContact" class="contact" placeholder="Enter primary contact here..." required><br><br>
-                    </div>
-
-                    <div class="input_item">
-                        <label for="secondaryContact">Secondary Contact:</label>
-                        <input type="tel" id="secondaryContact" name="secondaryContact" class="contact" placeholder="Enter secondary contact here..."><br><br>
-                    </div>
-                </div>
-
-
-                
-                <div class="input_item">
-                    <label for="address"> Residential Address:</label>
-                    <input type="text" id="address" name="address" class="address" placeholder="Enter residential address here..." required><br><br>
-                </div>
-                
-     
-                <button type="submit">Create Staff Record</button>
-            </form>
-        </div>
-    </div> -->
   
-    <script src="../js/staff_scripts.js" type="text/javascript"></script>
     <script src="../js/general_scripts.js" type="text/javascript"></script>
+    <script>
+        function searchFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById('search_input');
+        filter = input.value.toUpperCase();
+        table = document.getElementById("staff_doc_table");
+        tr = table.getElementsByTagName('tr');
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+            }
+        }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php
+    if(isset($_SESSION['status']) && $_SESSION['status'] !='')
+    {
+        ?>
+        <script>
+            Swal.fire({
+            title: "<?php echo $_SESSION['status'];?>",
+            icon: "<?php echo $_SESSION['status_code'];?>",
+            width: 400,
+            confirmButtonColor: "#002E35"
+            });
+
+        </script>
+        <?php
+            unset($_SESSION['status']);
+    }
+    ?>
 
 </body>
 

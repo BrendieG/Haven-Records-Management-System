@@ -1,1 +1,7 @@
-Have to do the modals for adding and editing a relative
+Delete buttons
+Change uploaded by ids from static to the id of logged in person
+
+
+
+Admin can access all pages
+Non-admin cannot access folders page, cannot add child

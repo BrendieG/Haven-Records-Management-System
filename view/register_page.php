@@ -6,7 +6,7 @@
     <title>Register</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="../css/styles3.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body id="register_body">
@@ -45,7 +45,7 @@
                 <i class="fa fa-lock"></i>
                 <input type="password" id="user_password1" name="user_password1" placeholder="Enter password here">
             </div>
-            <p id="password_error1">Password has to be at least 8 characters.</p>
+            <p id="password_error1" style="  width: 265px; font-size: 13px; margin-left: 20px; color: white;">Password has to have at least 8 characters, and at least 1 letter and 1 number .</p>
         </div>
 
         <div class="form-column">
@@ -69,7 +69,7 @@
                 <i class="fa fa-lock"></i>
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Enter password here">
             </div>
-            <p id="confirm_password_error">Password did not match! Please try again.</p>
+            <p id="confirm_password_error" style="  width: 265px; font-size: 13px; margin-left: 20px; color: white;">Password did not match! Please try again.</p>
         </div>
     </div>
 </div>
@@ -87,5 +87,26 @@
             </div>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php
+    include "../settings/core.php";
+    if(isset($_SESSION['status']) && $_SESSION['status'] !='')
+    {
+        ?>
+        <script>
+            Swal.fire({
+            title: "<?php echo $_SESSION['status'];?>",
+            //text: "You clicked the button!",
+            icon: "<?php echo $_SESSION['status_code'];?>",
+            width: 400,
+            confirmButtonColor: "#002E35"
+            });
+
+        </script>
+        <?php
+            unset($_SESSION['status']);
+    }
+    ?>
+    <script src="../js/register_scripts.js" type="text/javascript"></script>
 </body>
 </html>

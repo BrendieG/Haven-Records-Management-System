@@ -6,7 +6,7 @@
     <title>Log In</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="../css/styles3.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body id="login_body">
@@ -51,5 +51,26 @@
                 <a  id="register_link"href="register_page.php">Register.</a>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php
+    include "../settings/core.php";
+    
+    if(isset($_SESSION['status']) && $_SESSION['status'] !='')
+    {
+        ?>
+        <script>
+            Swal.fire({
+            title: "<?php echo $_SESSION['status'];?>",
+            //text: "You clicked the button!",
+            icon: "<?php echo $_SESSION['status_code'];?>",
+            width: 400,
+            confirmButtonColor: "#002E35"
+            });
+
+        </script>
+        <?php
+            unset($_SESSION['status']);
+    }
+    ?>
 </body>
 </html>
