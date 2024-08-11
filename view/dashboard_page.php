@@ -184,7 +184,9 @@ require_login();
                                     <p class="action_text p1">Edit</p>
                                 </div>
                                 <div>
-                                    <button class="action_btn delete_event_btn"><i class="fa fa-trash-o"></i></button>
+                                    <button class="action_btn delete_event_btn"
+                                    data-event-id="<?php echo $event_id; ?>"
+                                    data-event-name="<?php echo htmlspecialchars($event_name); ?>" ><i class="fa fa-trash-o"></i></button>
                                     <p class="action_text p2">Delete</p>
                                 </div>
                             </div>
@@ -262,6 +264,25 @@ require_login();
 
                 <button type="submit">Save Changes</button>
             </form>
+        </div>
+    </div>
+
+        <!--Modal for deleting a folder -->
+        <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id ="delete_close">&times;</span>
+            <h2>Are you sure you want to delete this event?</h2>
+            <p style= "text-align:center;">This will permanently delete this event from storage</p>
+            <p class="delete_event_name" style="text-align:center; font-weight:bold;"><br> <span> </span> </p><br>
+            <div style = "display:flex; flex-direction:row; gap:50px;">
+        
+            <button  id='cancel_btn'>Cancel</button>
+            
+            <form id="deleteForm" enctype="multipart/form-data" method="post" action="../actions/delete_event_action.php">
+                <input type="text" name="delete_event_id" id="delete_event_id" hidden>
+                <button type="submit" class='dlt_btn'>Delete</button>
+            </form>
+            </div>
         </div>
     </div>
 
