@@ -10,14 +10,7 @@ require("../settings/db_class.php");
  *
  */
 
-//  public function add_brand($a,$b)
-// 	{
-// 		$ndb = new db_connection();	
-// 		$name =  mysqli_real_escape_string($ndb->db_conn(), $a);
-// 		$desc =  mysqli_real_escape_string($ndb->db_conn(), $b);
-// 		$sql="INSERT INTO `brands`(`brand_name`, `brand_description`) VALUES ('$name','$desc')";
-// 		return $this->db_query($sql);
-// 	}
+
 class general_class extends db_connection
 {
 	//--INSERT--//
@@ -332,7 +325,20 @@ class general_class extends db_connection
 		return $this->db_count();
 	}
 	
-    
+    public function check_folder_empty($folder_id) {
+		$db = new db_connection();
+		$folder_id = mysqli_real_escape_string($db->db_conn(), $folder_id);  
+		
+		$sql = "SELECT COUNT(*) as count FROM document WHERE folder_id = '$folder_id'";
+		$result = $this->db_fetch_one($sql);
+		
+		if ($result && $result['count'] > 0) {
+			return false; 
+		}
+		
+		return true; 
+	}
+	
 
 
 
@@ -489,6 +495,19 @@ class general_class extends db_connection
 	}
 
 	//--DELETE--//
+	public function delete_document($document_id) {
+        $db = new db_connection();
+		$document_id = mysqli_real_escape_string($db->db_conn(), $document_id);
+        $sql = "DELETE FROM document WHERE document_id = '$document_id'";
+        return $this->db_query($sql);
+    }
+
+	public function delete_folder($folder_id) {
+        $db = new db_connection();
+		$folder_id = mysqli_real_escape_string($db->db_conn(), $folder_id);
+        $sql = "DELETE FROM folder WHERE folder_id = '$folder_id'";
+        return $this->db_query($sql);
+    }
 	
 
 }

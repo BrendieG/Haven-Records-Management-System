@@ -1,6 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
-
+include "../settings/core.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -11,11 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = update_folder_ctr($folder_id, $folder_name, $folder_desc);
 
     if ($result) {
-        echo "Folder successfully updated.";
+        $_SESSION['status'] = "Folder edited successfully!";
+        $_SESSION['status_code'] = "success";
+        header('Location: ../view/folders_page.php');
     } else {
-        echo "Error updating folder.";
+        $_SESSION['status'] = "Failed to make changes.";
+        $_SESSION['status_code'] = "error";
+        header('Location: ../view/folders_page.php');
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header('Location: ../view/folders_page.php');
 }
 ?>

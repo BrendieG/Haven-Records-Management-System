@@ -139,6 +139,11 @@ function get_document_by_id_ctr($document_id) {
     return $document->get_document_by_id($document_id);
 }
 
+function check_folder_empty_ctr($folder_id) {
+    $check_folder = new general_class();
+    return $check_folder->check_folder_empty($folder_id);
+}
+
 
 //--UPDATE--//
 function update_child_ctr($person_id, $fname,$mname, $lname, $gender, $dob, $date_of_admission, $hometown, $notes){
@@ -167,5 +172,13 @@ function update_folder_ctr($folder_id, $folder_name, $folder_desc){
 }
 
 //--DELETE--//
+function delete_document_ctr($document_id){
+    $delete_document = new general_class();
+    return $delete_document -> delete_document($document_id);
+}
 
+function delete_folder_ctr($folder_id){
+    $delete_folder = new general_class();
+    return $delete_folder -> delete_folder($folder_id);
+}
 ?>

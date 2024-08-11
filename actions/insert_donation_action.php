@@ -1,6 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
-
+include "../settings/core.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -17,11 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = insert_donation_ctr($fname, $lname, $email, $contact, $date, $amount, $items, $notes, $uploaded_by);
 
     if ($result) {
-        echo "Donation record successfully created.";
+        $_SESSION['status'] = "Donation added successfully!";
+        $_SESSION['status_code'] = "success";
+        header('Location: ../view/donations_page.php');
     } else {
-        echo "Error creating donation record.";
+        $_SESSION['status'] = "Failed to add donation.";
+        $_SESSION['status_code'] = "error";
+        header('Location: ../view/donations_page.php');
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header('Location: ../view/donations_page.php');
 }
 ?>

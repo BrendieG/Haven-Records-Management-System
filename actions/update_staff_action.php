@@ -1,6 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
-
+include "../settings/core.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -22,11 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = update_staff_ctr($person_id, $fname,$mname, $lname, $gender, $dob, $date_of_employment, $email, $role_id, $primary_contact, $secondary_contact, $address);
 
     if ($result) {
-        echo "Staff record successfully updated.";
+        $_SESSION['status'] = "Staff record edited successfully!";
+        $_SESSION['status_code'] = "success";
+        header("Location: ../view/single_staff_page.php?person_id=$person_id");
+
     } else {
-        echo "Error updating staff record.";
+        $_SESSION['status'] = "Failed to make changes.";
+        $_SESSION['status_code'] = "error";
+        header("Location: ../view/single_staff_page.php?person_id=$person_id");
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header("Location: ../view/single_staff_page.php?person_id=$person_id");
 }
 ?>

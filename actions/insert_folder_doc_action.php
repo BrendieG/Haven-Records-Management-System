@@ -1,5 +1,7 @@
 <?php
 include "../controllers/general_controller.php";
+include "../settings/core.php";
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['filename']) && $_FILES['filename']['error'] === UPLOAD_ERR_OK) {
@@ -15,18 +17,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  
         if (move_uploaded_file($file['tmp_name'], $file_path)) {
             $folder_id = $_POST['folder_id'];
-            $uploaded_by = '2'; // get the user ID $_SESSION['user_id']
+            $folder_name = $_POST['folder_name'];
+            $uploaded_by = $_SESSION['user_id'];
             
            
             insert_folder_document_ctr($file_name_without_ext, $folder_id, $file_name_with_ext, $uploaded_by);
 
 
-            echo "File uploaded and record added successfully.";
+            $_SESSION['status'] = "File uploaded successfully!";
+            $_SESSION['status_code'] = "success";
+            header("Location: ../view/single_folder_page.php?folder_id=$folder_id&folder_name=$folder_name");
         } else {
-            echo "Failed to move uploaded file.";
+            $_SESSION['status'] = "Failed to upload file.";
+            $_SESSION['status_code'] = "error";
+            header("Location: ../view/single_folder_page.php?folder_id=$folder_id & folder_name=$folder_name");
         }
     } else {
-        echo "No file uploaded or upload error.";
+        $_SESSION['status'] = "Invalid request.";
+        $_SESSION['status_code'] = "error";
+        header("Location: ../view/single_folder_page.php?folder_id=$folder_id & folder_name=$folder_name");
     }
 }
 ?>

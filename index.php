@@ -1,6 +1,6 @@
 <?php
 	// landing/index page
-	echo "Index Page";
+	header("Location: view/dashboard_page.php");
 ?>
 
 	

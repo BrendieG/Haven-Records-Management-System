@@ -1,5 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
+include "../settings/core.php";
 
 if (isset($_POST['register_btn'])){
     $fname = $_POST['user_fname'];
@@ -18,26 +19,28 @@ if (isset($_POST['register_btn'])){
 
     if($role_id){
         if(register_user_ctr($fname, $lname, $email, $encrypted_pass, $role_id)){
+            $_SESSION['status'] = "Signup successful!";
+            $_SESSION['status_code'] = "success";
             header("Location: ../view/login_page.php");
-            exit();
         }else{
-            echo "Signup Failed. You will be redirected soon...";
-            sleep(2);
-            header("Location: ../view/register_page.php");
-            exit();
+
+            $_SESSION['status'] = "Signup failed.";
+            $_SESSION['status_code'] = "error";
+            header('Location: ../view/register_page.php');
         }
 
     }else{
-        echo "Signup Failed. You will be redirected soon...";
-        sleep(2);
-        header("Location: ../view/register_page.php");
-        exit();
+            $_SESSION['status'] = "Signup failed.";
+            $_SESSION['status_code'] = "error";
+            header('Location: ../view/register_page.php');
     }
         
     // }
 } else {
    // Redirect to signup
-   header("Location: ../view/signup.php");
+   $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header('Location: ../view/register_page.php');
 }
 
 

@@ -1,5 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
+include "../settings/core.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,11 +15,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = update_event_ctr($event_id, $event_name, $event_location, $event_date, $start_time, $end_time);
 
     if ($result) {
-        echo "Event record successfully updated.";
+        $_SESSION['status'] = "Event edited successfully!";
+        $_SESSION['status_code'] = "success";
+        header('Location: ../view/dashboard_page.php');
     } else {
-        echo "Error updating event record.";
+        $_SESSION['status'] = "Failed to make changes.";
+        $_SESSION['status_code'] = "error";
+        header('Location: ../view/dashboard_page.php');
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header('Location: ../view/dashboard_page.php');
 }
 ?>

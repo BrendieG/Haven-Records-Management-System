@@ -1,5 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
+include "../settings/core.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    
@@ -16,16 +17,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($file['tmp_name'], $file_path)) {
            
             $person_id = $_POST['person_id'];
-            $uploaded_by = '2'; //get the user ID $_SESSION['user_id']
+            $uploaded_by = $_SESSION['user_id'];
+            
             
             insert_person_document_ctr($file_name_without_ext, $person_id, $file_name_with_ext, $uploaded_by);
 
-            echo "File uploaded and record added successfully.";
+            $_SESSION['status'] = "File uploaded successfully!";
+            $_SESSION['status_code'] = "success";
+            if (isset($_SERVER['HTTP_REFERER'])) {
+                $previous_page = $_SERVER['HTTP_REFERER'];
+                header("Location: $previous_page");
+            } else {
+                header("Location: ../view/dashboard_page.php");
+            }
         } else {
-            echo "Failed to move uploaded file.";
+            $_SESSION['status'] = "Failed to upload file.";
+            $_SESSION['status_code'] = "error";
+            if (isset($_SERVER['HTTP_REFERER'])) {
+                $previous_page = $_SERVER['HTTP_REFERER'];
+                header("Location: $previous_page");
+            } else {
+                header("Location: ../view/dashboard_page.php");
+            }
         }
     } else {
-        echo "No file uploaded or upload error.";
+        $_SESSION['status'] = "Invalid request.";
+        $_SESSION['status_code'] = "error";
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $previous_page = $_SERVER['HTTP_REFERER'];
+            header("Location: $previous_page");
+        } else {
+            header("Location: ../view/dashboard_page.php");
+        }
     }
 }
 ?>

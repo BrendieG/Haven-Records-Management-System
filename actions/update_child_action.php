@@ -1,6 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
-
+include "../settings/core.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -17,11 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = update_child_ctr($person_id, $fname, $mname, $lname, $gender, $dob, $date_of_admission, $hometown, $notes);
 
     if ($result) {
-        echo "Child record successfully updated.";
+        $_SESSION['status'] = "Child record edited successfully!";
+        $_SESSION['status_code'] = "success";
+        header("Location: ../view/single_child_page.php?person_id=$person_id");
+
     } else {
-        echo "Error updating child record.";
+        $_SESSION['status'] = "Failed to make changes.";
+        $_SESSION['status_code'] = "error";
+        header("Location: ../view/single_child_page.php?person_id=$person_id");
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header("Location: ../view/single_child_page.php?person_id=$person_id");
 }
 ?>

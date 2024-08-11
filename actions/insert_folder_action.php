@@ -1,6 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
-
+include "../settings/core.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -10,11 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = insert_folder_ctr($folder_name, $folder_desc);
 
     if ($result) {
-        echo "Folder created successfully.";
+        $_SESSION['status'] = "Folder created successfully!";
+        $_SESSION['status_code'] = "success";
+        header('Location: ../view/folders_page.php');
     } else {
-        echo "Error creating folder.";
+        $_SESSION['status'] = "Failed to create Folder.";
+        $_SESSION['status_code'] = "error";
+        header('Location: ../view/folders_page.php');
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header('Location: ../view/folders_page.php');
 }
 ?>

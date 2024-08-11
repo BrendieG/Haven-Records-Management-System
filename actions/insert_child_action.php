@@ -1,5 +1,6 @@
 <?php
 include "../controllers/general_controller.php";
+include "../settings/core.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,11 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = insert_child_ctr($fname, $mname, $lname, $gender, $dob, $date_of_admission, $hometown, $notes);
 
     if ($result) {
-        echo "Child record successfully created.";
+        $_SESSION['status'] = "Child record created successfully!";
+        $_SESSION['status_code'] = "success";
+        header('Location: ../view/children_page.php');
     } else {
-        echo "Error creating child record.";
+        $_SESSION['status'] = "Failed to create child record.";
+        $_SESSION['status_code'] = "error";
+        header('Location: ../view/children_page.php');
     }
 } else {
-    echo "Invalid request method.";
+    $_SESSION['status'] = "Invalid request.";
+    $_SESSION['status_code'] = "error";
+    header('Location: ../view/children_page.php');
 }
 ?>
