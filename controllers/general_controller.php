@@ -181,4 +181,9 @@ function delete_folder_ctr($folder_id){
     $delete_folder = new general_class();
     return $delete_folder -> delete_folder($folder_id);
 }
+
+function delete_event_ctr($event_id){
+    $delete_event = new general_class();
+    return $delete_event -> delete_event($event_id);
+}
 ?>
