@@ -509,6 +509,12 @@ class general_class extends db_connection
         return $this->db_query($sql);
     }
 	
+	public function delete_event($event_id) {
+        $db = new db_connection();
+		$event_id = mysqli_real_escape_string($db->db_conn(), $event_id);
+        $sql = "DELETE FROM upcoming_event WHERE event_id = '$event_id'";
+        return $this->db_query($sql);
+    }
 
 }
 
